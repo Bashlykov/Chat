@@ -126,7 +126,7 @@ public class ClientThread implements Runnable
                     continue;
                 }   
 
-                if ( message.getMessage().equalsIgnoreCase( "!n" ) )
+                if ( message.getMessage().equalsIgnoreCase( "!n" ) ) // switch user name
                 {                                       
                     message = ( Message ) inObj.readObject(); 
                     String tmpName = message.getUserName();
