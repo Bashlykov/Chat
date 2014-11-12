@@ -109,11 +109,7 @@ public class Server
         
     @SuppressWarnings( "fallthrough" )
     public static void main( String[] args ) throws IOException, XMLStreamException, ParserConfigurationException, SAXException, TransformerException
-    {                      
-        //Document document = docBuild.newDocument();
-        //Element root = document.getDocumentElement();
-        //Element rootElement = document.getDocumentElement();
-        
+    {                              
         Server.createConfigFile();
        
         Settings settings = new Settings();
