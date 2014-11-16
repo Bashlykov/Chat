@@ -177,6 +177,29 @@ public class ClientThread implements Runnable
                     continue;
                 }
                 
+                if ( message.getMessage().equalsIgnoreCase( "!rm" ) ) // remove user
+                {                                       
+                    message = ( Message ) inObj.readObject(); 
+                    String tmpName = message.getUserName();
+                    String tmpPass = message.getUserPass();                   
+                    
+                    Boolean userExists = runServer.delXmlRecord( tmpName, tmpPass );
+                    
+                    if ( userExists )
+                    {
+                        outObj.writeObject( new Message( "<RM>" ) );   
+                        outObj.flush();            
+                        System.out.println( "User is removed");
+                    }
+                    else
+                    {
+                        outObj.writeObject( new Message( "<NRM>" ) );
+                        outObj.flush();
+                        System.out.println( "User is NOT removed");
+                    }
+                    continue;
+                } 
+                
                 System.out.println( date + status + ip + user + msg );
                 outObj.writeObject( new Message( "OK" ) );
                 outObj.flush();               
