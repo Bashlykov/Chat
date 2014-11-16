@@ -35,12 +35,12 @@ public class Client
     private static String tmpUserName;
     private static String tmpUserPassword;
     
-    private static String userName()
+    private static String userName( String msg )
     {      
         String name = null;
         try
         {
-            System.out.println( "[Input your name:]" );
+            System.out.println( msg );
             name = sysin.readLine();
         }
         catch ( IOException ex )
@@ -155,6 +155,14 @@ public class Client
                             case "<NPCH>":
                                 System.out.println( "[Username or password are NOT correct]" );
                                 continue;
+                                
+                            case "<RM>":
+                                System.out.println( "[User is removed]" );
+                                continue;
+                                
+                            case "<NRM>":
+                                System.out.println( "[User is NOT removed]" );
+                                continue;
                         }
                                 
                         date = message.getDate() != null ? message.getDate() : "";
@@ -211,7 +219,7 @@ public class Client
                             outObj.writeObject( new Message( sendText ) );
                             outObj.flush(); 
                             
-                            Client.tmpUserName = Client.userName();
+                            Client.tmpUserName = Client.userName( "[Input your name:]" );
                             Client.tmpUserPassword = Client.userPassword( "[Input your password:]" );
                              
                             Message msg = new Message();
@@ -249,9 +257,27 @@ public class Client
                             outObj.writeObject( new Message( sendText ) );
                             outObj.flush();   
                             
-                            Client.userPassword = Client.userPassword( "[Registration your name]" );
+                            Client.userPassword = Client.userPassword( "[Registration your name]\n[Input your password]" );
                             
                             outObj.writeObject( new Message( Client.userPassword ) );
+                            outObj.flush();
+                            
+                            continue;
+                        }
+
+                        if ( sendText.equalsIgnoreCase( "!rm" ) ) // remove user
+                        {                           
+                            outObj.writeObject( new Message( sendText ) );
+                            outObj.flush();   
+                            
+                            Client.tmpUserName = Client.userName( "[User name for remove]" );
+                            Client.tmpUserPassword = Client.userPassword( "[User password for remove]" );
+                            
+                            Message msg = new Message();
+                            msg.setUserName(Client.tmpUserName );
+                            msg.setUserPass( Client.tmpUserPassword );
+                            
+                            outObj.writeObject( msg );
                             outObj.flush();
                             
                             continue;
