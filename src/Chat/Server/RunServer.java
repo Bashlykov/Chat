@@ -19,6 +19,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -253,8 +254,46 @@ public class RunServer
         return false; 
     }
         
-    public Boolean delXmlRecord( )
+    public Boolean delXmlRecord( String userName, String userPass ) throws SAXException, IOException, ParserConfigurationException, TransformerConfigurationException, TransformerException
     {
-       return false; 
+        DocumentBuilderFactory docBuildFact = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuild = docBuildFact.newDocumentBuilder();
+
+        Document document = docBuild.parse( FILE_PATH_CLIENTS );        
+        
+        Node accounts = document.getElementsByTagName( "accounts" ).item( 0 );
+        NodeList recordList = document.getElementsByTagName( "record" );
+        NodeList userList = document.getElementsByTagName( "user" );
+        NodeList passList = document.getElementsByTagName( "password" );
+        
+        for ( int i = 0; i < recordList.getLength(); i++ )
+        {
+            Node userNode = userList.item( i );           
+            Node passNode = passList.item( i );
+            
+            try
+            {
+                if ( userName.equals( userNode.getTextContent() ) 
+                        && userPass.equals( passNode.getTextContent() ) )
+                {
+                    Node record = recordList.item( i );
+                    accounts.removeChild( record );
+                    
+                    DOMSource source = new DOMSource( document );
+                    StreamResult result = new StreamResult( new File( FILE_PATH_CLIENTS ) );
+
+                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                    Transformer transformer = transformerFactory.newTransformer();
+                    transformer.transform( source, result );
+                    
+                    return true;
+                }
+            }
+            catch( java.lang.NullPointerException ex )
+            {
+                continue;
+            }
+        }       
+        return false; 
     }
 }
