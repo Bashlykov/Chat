@@ -4,4 +4,4 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 --><accounts>
     
-<record id="0"><user>cat</user><password>c@t</password></record><record id="1"><user>dog</user><password>d00g</password></record><record id="2"><user>fox</user><password>f0x</password></record></accounts>
+<record id="0"><user>cat</user><password>c@t</password></record><record id="2"><user>fox</user><password>f0x</password></record><record id="3"><user>client_9</user><password>999</password></record></accounts>
